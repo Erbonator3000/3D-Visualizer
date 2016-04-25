@@ -27,7 +27,7 @@ object GuiTest extends SimpleSwingApplication {
   picture(3)(5) = new Color(0.5f, 0.5f, 0.5f)
   picture(4)(5) = new Color(0.5f, 0.5f, 0.5f)  
   */
-    val maailma = new Space(20,20)
+    val maailma = Space.generateFromFile("testMap")
    /* maailma.addWall(1, 0)
     maailma.addWall(1, 1)
     maailma.addWall(1, 2)
@@ -57,7 +57,7 @@ object GuiTest extends SimpleSwingApplication {
     maailma.addWall(5, 6)    
     maailma.addWall(5, 7)*/
     
-    val kamera = new Camera(maailma, new Position(19,0))
+    val kamera = new Camera(maailma, new Position(2,2))
     
     var currentAngle=Pi-0.5
     

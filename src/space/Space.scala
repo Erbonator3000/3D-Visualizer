@@ -1,5 +1,7 @@
 package space
 
+import scala.io.Source
+
 /**
  * @author eero
  */
@@ -50,10 +52,24 @@ class Space(val dimX: Int, val dimY: Int){
   }
   
   
-  
-  
-  //TODO generate from file
 
-  
+}
+
+object Space{
+    //TODO generate from file
+  def generateFromFile(fileName: String): Space={
+    
+    val mapFile = Source.fromFile(fileName)
+    val rows=mapFile.getLines().toArray
+    val newSpace = new Space(rows.maxBy(_.length).length(),rows.length)
+    
+    for(i <- 0 until rows.length){
+      for(j <- 0 until rows(i).length){
+       if(rows(i)(j)=='1') newSpace.addWall(j, i) 
+      }
+    }
+    mapFile.close()
+    newSpace
+  } 
   
 }
