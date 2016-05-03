@@ -16,9 +16,8 @@ class Camera (val space: Space, var position: Position){
   var renderingDistance = 20
   
   
-  val wallHeight = 100 //TODO get this from space
+  val wallHeight = this.space.wallHeight
   
-  //var directionInWorld = Pi/2 // testing reasons
   
   def absolutePosX = this.position.x*cubeSize+(cubeSize.toDouble/2)
   def absolutePosY = this.position.y*cubeSize+(cubeSize.toDouble/2)  
@@ -27,7 +26,8 @@ class Camera (val space: Space, var position: Position){
 
  def shoot(sizeX: Int, sizeY: Int, fieldOfView: Int, facingDirection: Double) = {
    var directionInWorld=facingDirection
-    //normalizing the direction
+    
+   //normalizing the direction to be between 0 and 2*Pi
     while(directionInWorld>2*Pi)directionInWorld-=2*Pi
     while(directionInWorld<2*Pi)directionInWorld+=2*Pi    
     
@@ -41,12 +41,10 @@ class Camera (val space: Space, var position: Position){
     
     
     for(i <-0 until sizeX){
-      var distance=this.shootRay(a)*cos( (directionInWorld)-a ) // fishbowl efect correction, check if not working
+      var distance=this.shootRay(a)*cos( (directionInWorld)-a ) // fishbowl efect correction
       a+=dAngle
-      //println("chosen distance: "+distance)
-      //println()
-      
-      //TODO do something with the distance
+    
+      //draw the walls with the distance
       var slice=Array.ofDim[Color](sizeY)
       var sliceHeight=(this.wallHeight/distance)*distanceToProjectionPlane
       
@@ -60,56 +58,55 @@ class Camera (val space: Space, var position: Position){
   }
   
   
+  
+  
   def shootRay(shootingDirection: Double): Double={
-  // first we check the horizontal intersections
+    // first we check the horizontal intersections
     var direction=shootingDirection
-   //normalizing the direction
+    //normalizing the direction
     while(direction>2*Pi)direction-=2*Pi
     while(direction<0)direction+=2*Pi
    
-    
-    //println("current direction in rad: "+ direction.toString())
     
     var pointY = 0.0
     var pointX = 0.0
     
     var hDistance = 0.0
     
-  //if 0 or 180 degrees there is no horizontal intercourses
-  if(direction != 0 && direction != Pi) { 
-    var dY=0
+    //if 0 or 180 degrees there is no horizontal intercourses
+    if(direction != 0 && direction != Pi) { 
+      var dY=0
     
-  //if the ray is facing up
-    if(direction>0 && direction<Pi){ 
-      pointY=this.position.y*this.cubeSize-1
-      dY=(-this.cubeSize)
-      //println("Up")
-    }
-    //if the ray is facing down
-    else if(direction>Pi && direction < (2*Pi)) {
-      pointY=this.position.y*cubeSize+cubeSize+1 // just to make sure it is in the lower cube
-      dY=this.cubeSize
-      //println("down") 
-    }
+      //if the ray is facing up
+      if(direction>0 && direction<Pi){ 
+        pointY=this.position.y*this.cubeSize-1
+        dY=(-this.cubeSize)
+      }
+      //if the ray is facing down
+      else if(direction>Pi && direction < (2*Pi)) {
+        pointY=this.position.y*cubeSize+cubeSize+1 // just to make sure it is in the lower cube
+        dY=this.cubeSize 
+      }
    
-    pointX=this.absolutePosX+((this.absolutePosY-pointY)/tan(direction))
+      pointX=this.absolutePosX+((this.absolutePosY-pointY)/tan(direction))
     
     
-    var dX= -dY/tan(direction) //minus added to fix some strange ghost walls appearing everywhere
+      var dX= -dY/tan(direction) //minus added to fix some strange ghost walls appearing everywhere
       
       var n=1
     
-    while(hDistance==0/* && n <= renderingDistance*/){  
-            n+=1                  //here we had a bad mistake, do double chec if not working
-      //println(this.space.isWall(pointX,pointY)+"in position: " + pointX +" " + pointY)
-      if(this.space.isWall(pointX,pointY)) hDistance = abs(  (this.absolutePosY-pointY)/sin(direction)  )
-      else {
+      while(hDistance==0){  
+        n+=1                 
+      
+        if(this.space.isWall(pointX,pointY)) {
+          hDistance = abs(  (this.absolutePosY-pointY)/sin(direction)  )
+        }
+        else {
         pointX+=dX
         pointY+=dY
-      }
-    }
-    //println("Horizontal distance: "+hDistance)   
-  } 
+        }
+      } 
+    } 
     
     
     //then we find the vertical intersection points
@@ -126,33 +123,31 @@ class Camera (val space: Space, var position: Position){
       if(direction<(Pi/2) || direction>(3*Pi)/2){
         pointX=this.position.x*cubeSize+cubeSize+1 //+1 to make sure we are in the next cube  
         dX=this.cubeSize
-        //println("right")  
       } else if(direction > (Pi/2) && direction < (3*Pi)/2){
         pointX=this.position.x*this.cubeSize-1
         dX=(-this.cubeSize)
-        //println("left")
       }
       
       pointY = this.absolutePosY+(this.absolutePosX-pointX)*tan(direction)
       
       var dY = -dX*tan(direction)
       
-      
       var n = 1
       
-      while(vDistance==0 /*&& n<= this.renderingDistance*/){
+      while(vDistance==0){
         n+=1
-        //println(this.space.isWall(pointX,pointY)+" in position: " + pointX +" " + pointY)
-        if(this.space.isWall(pointX,pointY)) vDistance = abs(  (this.absolutePosX-pointX)/cos(direction)  )
+        if(this.space.isWall(pointX,pointY)) { 
+          vDistance = abs(  (this.absolutePosX-pointX)/cos(direction)  )
+        }
         else {
           pointX+=dX
           pointY+=dY
           n+=1
         }
       }
-      //println("vertical distance: "+ vDistance) 
     }
     
+    //pick what to return
     if(hDistance==0) vDistance
     else if (vDistance==0) hDistance
     else min(hDistance,vDistance)
@@ -161,24 +156,20 @@ class Camera (val space: Space, var position: Position){
   }
   
   
+  
+  
+  /** to draw a minimap of the space */ //not finished
   def drawMinimap(canvas: Array[Array[Color]],posX: Int, posY: Int, size: Int) = ???
  
-  
+  /**move to spesific position*/
   def moveTo(newPosition: Position)={
     if(!this.space.isWall(newPosition)) this.position=newPosition
   }
-  
+    /**move to spesific direction*/
     def move(xChange: Int, yChange: Int)={
       var newPosition = new Position(this.position.x+xChange,this.position.y+yChange)
       this.moveTo(newPosition)
   }
-  
-  
-  
-  
-
-  
-  
   
   
 }

@@ -2,6 +2,7 @@ package space
 
 /**
  * @author eero
+ * I guess that this is never used..
  */
 class Cube(val space: Space, val position: Position) {
   

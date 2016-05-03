@@ -3,11 +3,10 @@ package GUI
 import scala.swing._
 /**
  * @author eero
+ * Simple canvas to display Color arrays
  */
 class Canvas(var pixels: Array[Array[Color]]) extends Panel {
   
-  
-  //TODO set backroundColor 
   var backroundColor = new Color(0,0,0)
   
   def update(canvas: Array[Array[Color]]){
@@ -18,8 +17,6 @@ class Canvas(var pixels: Array[Array[Color]]) extends Panel {
   def dimY = pixels.map(_.length).max
   
   override def paintComponent(g: Graphics2D){
-   // val dx = g.getClipBounds.width/pixels.length
-   // val dy = g.getClipBounds.height/pixels(0).length
    val dx = g.getClipBounds.width.toFloat  / dimX
    val dy = g.getClipBounds.height.toFloat / dimY
     
@@ -31,8 +28,7 @@ class Canvas(var pixels: Array[Array[Color]]) extends Panel {
       
       g.fillRect((x*dx).toInt, (y*dy).toInt, ((x+1)*dx).toInt, ((y+1)*dy).toInt)
 
-    }
-    
+    } 
   }  
 }
 
