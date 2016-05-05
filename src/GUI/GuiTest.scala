@@ -54,10 +54,22 @@ object GuiTest extends SimpleSwingApplication {
           turn(-(Pi/16))
           
         case KeyPressed(_,Key.Up,_,_)=>
-          walk(1)
+          walk(1,0)
         
        case KeyPressed(_,Key.Down,_,_)=>
-          walk(-1)
+          walk(-1,0)
+          
+        case KeyPressed(_,Key.W,_,_)=>
+          walk(1,0)
+        
+       case KeyPressed(_,Key.S,_,_)=>
+          walk(-1,0)
+          
+       case KeyPressed(_,Key.A,_,_)=>
+          walk(0,-1)
+        
+       case KeyPressed(_,Key.D,_,_)=>
+          walk(0,1)
       }
     }
         
@@ -66,11 +78,11 @@ object GuiTest extends SimpleSwingApplication {
      
   
      //perform walking operation  
-    def walk(speed: Int)={
-      if(3*Pi/4>currentAngle && currentAngle>=Pi/4) kamera.move(0,-1*speed)
-      else if(3*Pi/4<=currentAngle && currentAngle<5*Pi/4) kamera.move(-1*speed,0)
-      else if(7*Pi/4>currentAngle && currentAngle>=5*Pi/4) kamera.move(0,1*speed)
-      else if(currentAngle>=7*Pi/4 || currentAngle<Pi/4) kamera.move(1*speed,0)
+    def walk(speed: Int, sideStep: Int)={
+      if(3*Pi/4>currentAngle && currentAngle>=Pi/4) kamera.move(sideStep,-1*speed) //facing up
+      else if(3*Pi/4<=currentAngle && currentAngle<5*Pi/4) kamera.move(-1*speed,-1*sideStep) //facing left
+      else if(7*Pi/4>currentAngle && currentAngle>=5*Pi/4) kamera.move(-1*sideStep,speed) //facing down
+      else if(currentAngle>=7*Pi/4 || currentAngle<Pi/4) kamera.move(speed,sideStep) //facing right
         
       //after moved, shoot a new picture of the world
       picture = kamera.shoot(200, 200, 60, currentAngle)
@@ -84,7 +96,6 @@ object GuiTest extends SimpleSwingApplication {
       while(currentAngle<0)currentAngle+=2*Pi
       while(currentAngle>2*Pi)currentAngle-=2*Pi
 
-      println(currentAngle)
       picture = kamera.shoot(200, 200, 60, currentAngle)
       this.canvas.update(picture)
       this.canvas.repaint() 
