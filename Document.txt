@@ -1,0 +1,91 @@
+3D-visualisaattorin dokumentaatio
+
+Eero Prittinen 527321
+
+EST, ensimmäinen  vuosikurssi
+
+5.5.2016
+
+Yleiskuvaus ohjelmasta:
+
+Ohjelman on tarkoitus visualisoida havainnollistavalla tavalla neliönmuotoisista alueista koostuvan huoneiston
+kolmiulotteisena ympäristönä. Itse käytin tämän visuaalisen ilmeen saavuttamiseksi samaa menetelmää, jota käytettiin
+ensimmäisissä pseudokolmiulotteisia grafiikoita hyödyntävissä peleissä. Ohjelma pystyy lukemaan visualisoitavan 
+alueen tiedostosta.
+
+Käyttöohje:
+
+Ohjelma käynnistyy suoraan visualisointinäkymään ja lataa käyttämänsä kartan tiedostosta. Liikuminen maailmassa 
+suoriteteen käyttämällä nuolinäppäimiä kääntymiseen ja WASD näppäimiä liikkumiseen. Liikkuminen tapahtuu vain 
+Itä-Länsi ja Pohjois-Etelä suunnissa ja ohjelma sovittaa liikkeen näiden mukaiseksi riippumatta siitä mihin 
+suuntaan käyttäjä katsoo.
+
+Ohjelman rakenne: 
+
+Ohjelma koostuu kahdesta paketista: GUI sisältää varsinaiseen piirtämiseen liittyvät luokat ja käyttöliittymän
+ja space sisältää piirrettävää maailmaa käsittelevät luokat ja kameran, jolla kolmiulotteisuus saadaan näkyviin. 
+
+GUI: 
+Canvas laajentaa paneelia ottamaan vastaan Color tyyppisiä taulukoita ja piirtämään ne käyttöliittymään.
+
+space: 
+Camera huolehtii raycastin menetelmän toteutuksesta ja voi ottaa "kuvia" eri suuntiin eri pisteistä karttaa.
+Position kuvaa sijaintia kartan ruudukossa(ei absoluuttista sijaintia)
+Space hallinnoi käytettävää maailmaa, mitkä ruudut ovat seiniä ja mitkä eivät. Sen kumppaniolio kykenee 
+muodostamaan uusia Space-olioita tekstitiedoston pohjalta.
+
+
+Algoritmit: 
+
+3D kuvan muodostamiseen käytetyt algoritmit ovat sivustolta http://permadi.com/1996/05/ray-casting-tutorial-table-of-contents/
+Pääasiassa raycasting pseudo3D toimii kuitenkin seuraavasti: 
+-normalisoidaan katselusuunta välille 0..2*Pi 
+-lasketaan katselusuunnan ja katselukulman mukaan "reuninmaisin katselusuunta" 
+-lasketaan kulman muutos per suunta: katselukulma/skannattavien suuntien määrä 
+-"katsotaan" jokaiseen suuntaan ja mitataan etäisyys lähimpään seinään. 
+-muodostetaan kuva skaalaamalla piirrettävän "seinäviipaleen" korkeutta etäisyyden mukaan. 
+-hieno efekti saadaan myös jos skaalataan seinän tummuutta etäisyyden mukaan 
+
+Tietorakenteet: 
+
+Käytin lähinnä Array tyyppisiä tietorakenteita, sillä suurin osa tarvittavasta tiedosta oli vakiokokoista, 
+mutta sitä oli kuitenkin hyvä pystyä muuttamaan. 
+
+Tiedostot: 
+
+Ohjelma lukee käyttämänsä kartan tekstitiedostosta. Tiedoston formaatti toimii siten, että merkit vastaavat 
+paikkoja kartalla: 
+ 
+12001100
+10001100
+11011100
+10000000
+11101111 
+
+Merkit on määritelty siten, että '1' tarkoittaa seinää, '0' tyhjää tilaa ja '2' katselun aloitussijaintia. 
+
+Testaus: 
+
+Koska ohjelman ulosanti on varsin graafinen, suoritettiin testaus ihmiskokeilla. Jos asiat eivät näyttäneet 
+siltä miltä piti, jotain oli vialla. 
+
+3 parasta:
+Raycasting toimii ja on toteutettu jokseenkin johdonmukaisesti
+kartta generoituu hyvin tiedostosta
+Liikkumisen ohjaaminen toimii hyvin 
+
+3 huonointa:
+Kuvan muodostaminen "pikseli" kerrallaan tekee piirtämisestä hidasta
+jos seinät ovat kaukana, ruudun päivittyminen hidastuu
+Canvas on sutaistu aika noteasi kasaan, kuhan toimii. 
+
+Poikkeamat suunnitelmaan: 
+
+Sain vinkin raycasting menetelmään oikeastaan vasta suunitelmademossa, joten koko suunnitelma meni tavallaan uusiksi. 
+
+Ajankäyttö: 
+
+Ajankäyttösuunnitelma osui kohdilleen melko hyvin, vaikkakin raycasting-algoritmin saaminen toimimaan veikin 
+hiukan enemmän aikaa kuin olin suunitellut. 
+
+
