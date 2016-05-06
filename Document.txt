@@ -89,6 +89,18 @@ Ajankäyttösuunnitelma osui kohdilleen melko hyvin, vaikkakin raycasting-algori
 hiukan enemmän aikaa kuin olin suunitellut. 
 
 Arvio lopputuloksesta:
+Olen itse tyytyväinen, että sain ohjelman edes toimimaan oikein. Projektissa oli paljon helppoja kohtia, 
+joiden koodaamiseen ei mennyt kovinkaan palojoa aikaa, mutta myös vaikeampia vaiheita, jotka vaativat 
+useamman keskittyneemmän yrityksen ennen onnistumistaan. Lopullisesta ohjelmasta tuli halutunlainen, mutta 
+se voisi toimia hiukan nopeammin. Tämä oltaisiin voitu saavuttaa optimoimalla piirtokomentoja ja laskentaa.
+
+Viitteet:
+
+ehdottomasti tärkein!: http://permadi.com/1996/05/ray-casting-tutorial-table-of-contents/
+Ilman tätä en olisi varmaankaan ymmärtänyt yksityiskohtia siitä, mitä tarvitaan raycastin menetelmän käyttöön.
+(Huomaa julkaisuvuosi 1996)
+
+Myös kurssin oma materiaali oli aktiivisessa käytössä.
 
 
 

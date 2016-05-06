@@ -24,7 +24,7 @@ object GuiTest extends SimpleSwingApplication {
   val window = new MainFrame{
   
     //generate the world
-    val maailma = Space.generateFromFile("testMap")
+    val maailma = Space.generateFromFile("Map")
 
     //set the camera
     val kamera = new Camera(maailma, this.maailma.startingPosition)
