@@ -88,4 +88,7 @@ Ajankäyttö:
 Ajankäyttösuunnitelma osui kohdilleen melko hyvin, vaikkakin raycasting-algoritmin saaminen toimimaan veikin 
 hiukan enemmän aikaa kuin olin suunitellut. 
 
+Arvio lopputuloksesta:
+
+
 
